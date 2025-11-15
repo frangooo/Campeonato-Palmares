@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Copa Palmares — Campeonato</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Inter:wght@300;400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      /* Cores do tema do index.html */
+      --bg: #e4ddcb;
+      --accent: #7d331f;
+      --muted: #b89175;
+      --muted-text: #978071;
+      --dark: #391b12;
+      --gold: #b17a36;
+      --card: #ffffff;
+      --accent-grad: linear-gradient(90deg, #7d331f 0%, #b17a36 50%, #e4ddcb 100%);
+      --accent-dark: linear-gradient(270deg, #391b12 0%, #6e2f1b 50%, #7d331f 100%);
+
+      /* Cores específicas para o campeonato */
+      --sidebar-bg: var(--dark);
+      --sidebar-accent: var(--accent);
+      --main-bg: var(--bg);
+      --card-bg: var(--card);
+      --text-dark: var(--dark);
+      --text-light: #ffffff;
+      --accent-yellow: var(--gold);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, 'Helvetica Neue', Arial;
+      background: var(--main-bg);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      margin-left: 280px;
+      width: calc(100% - 280px);
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar styles are in styles.css */
+
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 0;
+      padding: 32px;
+      min-height: 100vh;
+      background: var(--main-bg);
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+
+    .content-section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 28px;
+      margin-right: 200px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 24px rgba(10, 10, 10, 0.06);
+      width: 90%;
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .page-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--muted-text);
+      margin-bottom: 32px;
+    }
+
+    .content-grid {
+      /* display: flex; */
+      grid-template-columns: 1fr 400px;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .content-section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 10px 24px rgba(10, 10, 10, 0.06);
+    }
+
+    .section-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      margin-bottom: 20px;
+    }
+
+    .dropdown select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid rgba(125, 51, 31, 0.2);
+      border-radius: 8px;
+      background: white;
+      color: var(--dark);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23391b12' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+
+    .dropdown select:hover {
+      border-color: var(--accent);
+    }
+
+    /* Classification Table */
+    .classification-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .classification-table thead {
+      background: var(--accent);
+      color: white !important;
+    }
+
+    .classification-table th {
+      padding: 12px 8px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: white !important;
+    }
+
+    .classification-table th.stats-cell {
+      color: white !important;
+      text-align: center;
+    }
+
+    .classification-table th:first-child {
+      padding-left: 16px;
+    }
+
+    .classification-table th:last-child {
+      padding-right: 16px;
+    }
+
+    .classification-table tbody tr {
+      border-bottom: 1px solid rgba(125, 51, 31, 0.1);
+    }
+
+    .classification-table tbody tr:hover {
+      background: rgba(228, 221, 203, 0.5);
+    }
+
+    .classification-table td {
+      padding: 14px 8px;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .classification-table td:first-child {
+      padding-left: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      width: 50px;
+    }
+
+    .classification-table td:last-child {
+      padding-right: 16px;
+    }
+
+    .team-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .team-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #4caf50 0%, #ffc107 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: white;
+    }
+
+    .team-name-cell {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .team-cell {
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .team-cell:hover {
+      opacity: 0.8;
+    }
+
+    .team-cell::after {
+      content: '👥';
+      margin-left: 8px;
+      font-size: 14px;
+      opacity: 0.6;
+    }
+
+    /* Modal para mostrar membros do time */
+    .team-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .team-modal.active {
+      display: flex;
+    }
+
+    .team-modal-content {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .team-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid rgba(125, 51, 31, 0.1);
+    }
+
+    .team-modal-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .team-modal-close {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--muted-text);
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .team-modal-close:hover {
+      background: rgba(125, 51, 31, 0.1);
+      color: var(--accent);
+    }
+
+    .team-members-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(228, 221, 203, 0.3);
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .team-member:hover {
+      background: rgba(228, 221, 203, 0.5);
+    }
+
+    .team-member-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .team-member-name {
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 16px;
+    }
+
+    .team-member-role {
+      font-size: 12px;
+      color: var(--muted-text);
+      margin-top: 2px;
+    }
+
+    .stats-cell {
+      text-align: center;
+      font-weight: 600;
+      color: var(--muted-text);
+    }
+
+    /* Games Section */
+    .games-section {
+      background: var(--accent);
+      color: white;
+    }
+
+    .games-section .section-title {
+      color: white;
+    }
+
+    .games-section .dropdown select {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .game-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 8px;
+      padding: 16px;
+      color: var(--dark);
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: var(--muted-text);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .game-header span {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
+    }
+
+    .game-teams {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+    }
+
+    .game-team {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .game-team-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .game-team-name {
+      font-size: 13px;
+      font-weight: 600;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .game-score {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .game-score span {
+      white-space: nowrap;
+    }
+
+    .game-status {
+      text-align: left;
+      font-size: 12px;
+      color: var(--muted-text);
+      margin-top: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      line-height: 1.4;
+    }
+
+    .game-status.finished {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Podium Section */
+    .podium-section {
+      margin-top: 40px;
+    }
+
+    .podium-container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+      padding: 0 20px;
+    }
+
+    .podium-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .podium-item.second {
+      order: 1;
+    }
+
+    .podium-item.first {
+      order: 2;
+    }
+
+    .podium-item.third {
+      order: 3;
+    }
+
+    .podium-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--accent-grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(125, 51, 31, 0.3);
+      z-index: 2;
+      position: relative;
+    }
+
+    .podium-avatar.first {
+      width: 100px;
+      height: 100px;
+      font-size: 40px;
+      background: linear-gradient(135deg, var(--gold) 0%, #d4a44f 100%);
+      box-shadow: 0 6px 20px rgba(177, 122, 54, 0.4);
+    }
+
+    .podium-avatar.second {
+      background: linear-gradient(135deg, var(--muted) 0%, #a67d5f 100%);
+    }
+
+    .podium-avatar.third {
+      background: linear-gradient(135deg, #b17a36 0%, #957448 100%);
+    }
+
+    .podium-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .podium-stand {
+      width: 100%;
+      background: var(--accent-grad);
+      border-radius: 8px 8px 0 0;
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      box-shadow: 0 4px 12px rgba(125, 51, 31, 0.2);
+    }
+
+    .podium-stand.first {
+      height: 180px;
+      background: linear-gradient(135deg, var(--gold) 0%, #d4a44f 100%);
+    }
+
+    .podium-stand.second {
+      height: 140px;
+      background: linear-gradient(135deg, var(--muted) 0%, #a67d5f 100%);
+    }
+
+    .podium-stand.third {
+      height: 120px;
+      background: linear-gradient(135deg, #b17a36 0%, #957448 100%);
+    }
+
+    .podium-rank {
+      font-size: 36px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .podium-stand-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    /* Awards/Prizes Section */
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .award-card {
+      background: var(--card-bg);
+      border: 2px solid rgba(125, 51, 31, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .award-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(125, 51, 31, 0.15);
+      border-color: var(--accent);
+    }
+
+    .award-card-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+
+    .award-card-icon.champion {
+      background: linear-gradient(135deg, var(--gold) 0%, #d4a44f 100%);
+    }
+
+    .award-card-icon.second {
+      background: linear-gradient(135deg, var(--muted) 0%, #a67d5f 100%);
+    }
+
+    .award-card-icon.third {
+      background: linear-gradient(135deg, #b17a36 0%, #957448 100%);
+    }
+
+    .award-card-icon.other {
+      background: linear-gradient(135deg, var(--muted) 0%, #978071 100%);
+    }
+
+    .award-card-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .award-card-description {
+      font-size: 14px;
+      color: var(--muted-text);
+      line-height: 1.5;
+    }
+
+    .section-divider {
+      margin: 60px 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(125, 51, 31, 0.2), transparent);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100vw;
+        height: 64px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        background: var(--dark);
+        box-shadow: 0 4px 20px rgba(57, 27, 18, 0.5);
+      }
+
+      .sidebar-nav {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        height: 64px;
+      }
+
+      .nav-item span {
+        display: none;
+      }
+
+      .nav-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+      }
+
+      .content-wrapper {
+        padding-top: 64px;
+        margin-left: 0;
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .team-modal {
+        padding: 12px;
+      }
+
+      .team-modal-content {
+        padding: 20px;
+        max-width: 90%;
+      }
+
+      .team-modal-title {
+        font-size: 20px;
+      }
+
+      .team-member {
+        padding: 10px;
+      }
+
+      .team-member-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+
+      .team-member-name {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="content-wrapper">
+    <!-- Sidebar -->
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="5semana.png" alt="Logo" class="sidebar-logo">
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="index.html" class="nav-item  ">
+          <div class="nav-icon">🏠</div>
+          <span>Início</span>
+        </a>
+        <a href="campeonato.html" class="nav-item active">
+          <div class="nav-icon">🏆</div>
+          <span>Campeonato</span>
+        </a>
+      </nav>
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <h1 class="page-title">Campeonato Palmares</h1>
+      <p class="page-subtitle">IFMG – Campus Ibirité 2025</p>
+
+      <div class="content-grid">
+        <!-- Classification Section -->
+        <section class="content-section">
+          <h2 class="section-title">Classificação</h2>
+
+          <div class="table-wrapper">
+            <table class="classification-table">
+              <thead>
+                <tr>
+                  <th>Pos</th>
+                  <th>EQUIPES</th>
+                  <th class="stats-cell">Cartaz</th>
+                  <th class="stats-cell">Kahoot 1</th>
+                  <th class="stats-cell">Kahoot 2</th>
+                  <th class="stats-cell">Kahoot 3</th>
+                  <th class="stats-cell">Vídeo</th>
+                  <th class="stats-cell">Caça</th>
+                  <th class="stats-cell">Pts Totais</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-team-id="team1">
+                  <td>1</td>
+                  <td class="team-cell" onclick="showTeamMembers('team1')">
+                    <div class="team-icon">🏆</div>
+                    <div class="team-name-cell">Equipe Palmares</div>
+                  </td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                </tr>
+                <tr data-team-id="team2">
+                  <td>2</td>
+                  <td class="team-cell" onclick="showTeamMembers('team2')">
+                    <div class="team-icon">🏆</div>
+                    <div class="team-name-cell">Automação Industrial 3º Ano</div>
+                  </td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                </tr>
+                <tr data-team-id="team3">
+                  <td>3</td>
+                  <td class="team-cell" onclick="showTeamMembers('team3')">
+                    <div class="team-icon">🏆</div>
+                    <div class="team-name-cell">Equipe Zumbi dos Palmares</div>
+                  </td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                </tr>
+                <tr data-team-id="team4">
+                  <td>4</td>
+                  <td class="team-cell" onclick="showTeamMembers('team4')">
+                    <div class="team-icon">🏆</div>
+                    <div class="team-name-cell">Equipe Consciência Negra</div>
+                  </td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                </tr>
+                <tr data-team-id="team5">
+                  <td>5</td>
+                  <td class="team-cell" onclick="showTeamMembers('team5')">
+                    <div class="team-icon">🏆</div>
+                    <div class="team-name-cell">Equipe Resistência</div>
+                  </td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                  <td class="stats-cell">0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Ranking Section -->
+        <section id="ranking" class="content-section podium-section">
+          <h2 class="section-title">Ranking</h2>
+
+          <div class="podium-container">
+            <div class="podium-item second">
+              <div class="podium-avatar second">🥈</div>
+              <div class="podium-name">*</div>
+              <div class="podium-stand second">
+                <div class="podium-rank">2</div>
+                <div class="podium-stand-label">2º Lugar</div>
+              </div>
+            </div>
+
+            <div class="podium-item first">
+              <div class="podium-avatar first">🥇</div>
+              <div class="podium-name">*</div>
+              <div class="podium-stand first">
+                <div class="podium-rank">1</div>
+                <div class="podium-stand-label">1º Lugar</div>
+              </div>
+            </div>
+
+            <div class="podium-item third">
+              <div class="podium-avatar third">🥉</div>
+              <div class="podium-name">*</div>
+              <div class="podium-stand third">
+                <div class="podium-rank">3</div>
+                <div class="podium-stand-label">3º Lugar</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+
+        <!-- Modal de Membros do Time -->
+        <div class="team-modal" id="teamModal">
+          <div class="team-modal-content">
+            <div class="team-modal-header">
+              <div class="team-modal-title" id="modalTeamTitle">
+                <span>👥</span>
+                <span id="modalTeamName"></span>
+              </div>
+              <button class="team-modal-close" onclick="closeTeamModal()">&times;</button>
+            </div>
+            <div class="team-members-list" id="teamMembersList">
+              <!-- Membros serão inseridos aqui via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <script>
+          // Dados dos times com membros (2 a 4 pessoas)
+          const teamsData = {
+            team1: {
+              name: 'Equipe Palmares',
+              members: [
+                { name: 'Pedro Camargos da Silva', role: 'Representante' },
+                { name: 'Maria Silva Santos', role: 'Membro' },
+                { name: 'João Pedro Oliveira', role: 'Membro' },
+                { name: 'Ana Carolina Costa', role: 'Membro' }
+              ]
+            },
+            team2: {
+              name: 'Automação Industrial 3º Ano',
+              members: [
+                { name: 'Carlos Eduardo Lima', role: 'Representante' },
+                { name: 'Fernanda Rodrigues', role: 'Membro' },
+                { name: 'Lucas Henrique Souza', role: 'Membro' }
+              ]
+            },
+            team3: {
+              name: 'Equipe Zumbi dos Palmares',
+              members: [
+                { name: 'Gustavo Canuto Cunha', role: 'Representante' },
+                { name: 'Beatriz Almeida', role: 'Membro' }
+              ]
+            },
+            team4: {
+              name: 'Equipe Consciência Negra',
+              members: [
+                { name: 'Pedro Lucas da Silva', role: 'Representante' },
+                { name: 'Juliana Ferreira', role: 'Membro' },
+                { name: 'Rafael Martins', role: 'Membro' },
+                { name: 'Camila Santos', role: 'Membro' }
+              ]
+            },
+            team5: {
+              name: 'Equipe Resistência',
+              members: [
+                { name: 'José Victor', role: 'Representante' },
+                { name: 'Mariana Costa', role: 'Membro' },
+                { name: 'Thiago Alves', role: 'Membro' }
+              ]
+            }
+          };
+
+          function showTeamMembers(teamId) {
+            const team = teamsData[teamId];
+            if (!team) return;
+
+            const modal = document.getElementById('teamModal');
+            const modalTeamName = document.getElementById('modalTeamName');
+            const teamMembersList = document.getElementById('teamMembersList');
+
+            modalTeamName.textContent = team.name;
+            teamMembersList.innerHTML = '';
+
+            team.members.forEach((member, index) => {
+              const memberDiv = document.createElement('div');
+              memberDiv.className = 'team-member';
+              memberDiv.innerHTML = `
+          <div class="team-member-icon">${index === 0 ? '👑' : '👤'}</div>
+          <div>
+            <div class="team-member-name">${member.name}</div>
+            <div class="team-member-role">${member.role}</div>
+          </div>
+        `;
+              teamMembersList.appendChild(memberDiv);
+            });
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          }
+
+          function closeTeamModal() {
+            const modal = document.getElementById('teamModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+
+          // Fechar modal ao clicar fora
+          document.getElementById('teamModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+              closeTeamModal();
+            }
+          });
+
+          // Fechar modal com ESC
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+              closeTeamModal();
+            }
+          });
+        </script>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+            if (!menuToggle || !sidebar || !sidebarOverlay) {
+              console.error('Menu elements not found');
+              return;
+            }
+
+            function toggleMenu(e) {
+              if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+              const isOpen = sidebar.classList.contains('open');
+              menuToggle.classList.toggle('active');
+              sidebar.classList.toggle('open');
+              sidebarOverlay.classList.toggle('active');
+              document.body.style.overflow = !isOpen ? 'hidden' : '';
+            }
+
+            function closeMenu() {
+              menuToggle.classList.remove('active');
+              sidebar.classList.remove('open');
+              sidebarOverlay.classList.remove('active');
+              document.body.style.overflow = '';
+            }
+
+            // Prevenir que cliques dentro da sidebar fechem o menu
+            sidebar.addEventListener('click', function (e) {
+              e.stopPropagation();
+            });
+
+            sidebar.addEventListener('touchend', function (e) {
+              e.stopPropagation();
+            });
+
+            // Apenas o botão hambúrguer pode abrir/fechar o menu
+            menuToggle.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleMenu(e);
+            }, false);
+
+            menuToggle.addEventListener('touchend', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleMenu(e);
+            }, false);
+
+            // Links funcionam normalmente, mas não fecham o menu automaticamente
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+              item.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const href = item.getAttribute('href');
+
+                // Se for link para outra página, deixa navegar normalmente
+                if (href && !href.startsWith('#')) {
+                  // Navegação normal para outras páginas
+                  return true;
+                }
+
+                // Se for link âncora, faz scroll suave
+                if (href && href.startsWith('#')) {
+                  e.preventDefault();
+                  const target = document.querySelector(href);
+                  if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }, false);
+
+              item.addEventListener('touchend', function (e) {
+                e.stopPropagation();
+                const href = item.getAttribute('href');
+
+                if (href && !href.startsWith('#')) {
+                  return true;
+                }
+
+                if (href && href.startsWith('#')) {
+                  e.preventDefault();
+                  const target = document.querySelector(href);
+                  if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }, false);
+            });
+          });
+        </script>
+</body>
+
+</html>
