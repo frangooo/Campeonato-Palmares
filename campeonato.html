@@ -371,6 +371,12 @@
       color: var(--muted-text);
     }
 
+    /* Destaque para a célula de total */
+    .classification-table td.total-cell {
+      font-weight: 800;
+      color: var(--accent);
+    }
+
     /* Games Section */
     .games-section {
       background: var(--accent);
@@ -831,7 +837,8 @@
                   <th class="stats-cell">Caça</th>
                   <th class="stats-cell">Pts Totais</th>
                 </tr>
-              </thead>              <tbody>
+              </thead>
+              <tbody>
                 <tr data-team-id="team1">
                   <td>1</td>
                   <td class="team-cell" onclick="showTeamMembers('team1')">
@@ -1388,7 +1395,7 @@
                 { name: 'Felipe Lúcio', role: 'Membro' },
                 { name: 'Anna Beatriz', role: 'Membro' }
               ]
-            }, 
+            },
             team7: {
               name: '4bits',
               members: [
@@ -1756,6 +1763,94 @@
                 }
               }, false);
             });
+          });
+        </script>
+        <script>
+          // Atualiza os totais: soma todas as células de pontuação (exceto a última) e escreve o resultado na última célula
+          function parseScore(text) {
+            if (!text) return 0;
+            const trimmed = text.trim();
+            if (trimmed === '-' || trimmed === '') return 0;
+            // Troca vírgula por ponto para parseFloat (ex: '9,1' -> '9.1')
+            const normalized = trimmed.replace(/\s+/g, '').replace(',', '.');
+            const val = parseFloat(normalized);
+            return Number.isFinite(val) ? val : 0;
+          }
+
+          function formatScore(value) {
+            if (Number.isInteger(value)) return String(value);
+            return String(Math.round(value * 10) / 10).replace('.', ','); // 1 decimal (like 9,1)
+          }
+
+          function updateTotals() {
+            const table = document.querySelector('.classification-table');
+            if (!table) return;
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+              const statCells = Array.from(row.querySelectorAll('td.stats-cell'));
+              if (statCells.length === 0) return; // nada para somar
+              const lastIndex = statCells.length - 1;
+              const cellsToSum = statCells.slice(0, lastIndex); // ignora a última célula (Pts Totais)
+              let sum = 0;
+              cellsToSum.forEach(cell => {
+                sum += parseScore(cell.textContent || cell.innerText);
+              });
+              const formatted = formatScore(sum);
+              statCells[lastIndex].textContent = formatted;
+              statCells[lastIndex].classList.add('total-cell');
+            });
+            // Após atualizar os totais, reordena a tabela automaticamente
+            sortTableByTotal();
+          }
+
+          function getTotalFromRow(row) {
+            const statCells = Array.from(row.querySelectorAll('td.stats-cell'));
+            if (statCells.length === 0) return 0;
+            const lastCell = statCells[statCells.length - 1];
+            return parseScore(lastCell.textContent || lastCell.innerText);
+          }
+
+          function sortTableByTotal() {
+            const table = document.querySelector('.classification-table');
+            if (!table) return;
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            // Ordena por total desc (maior primeiro). Mantém ordem estável se empates.
+            rows.sort((a, b) => {
+              const totalA = getTotalFromRow(a);
+              const totalB = getTotalFromRow(b);
+              return totalB - totalA;
+            });
+
+            // Re-apenda as linhas na nova ordem no tbody
+            rows.forEach((row, index) => {
+              // atualiza a posição (coluna 1)
+              const posCell = row.querySelector('td:first-child');
+              if (posCell) posCell.textContent = (index + 1).toString();
+              tbody.appendChild(row);
+            });
+          }
+
+          // Executa ao carregar a página
+          document.addEventListener('DOMContentLoaded', function () {
+            updateTotals();
+            // Observador: se alguém editar células, atualiza os totais automaticamente
+            const tableBody = document.querySelector('.classification-table tbody');
+            if (tableBody) {
+              let isUpdating = false; // evita loop infinito de observer -> updateTotals -> observer
+              const observer = new MutationObserver((mutationsList) => {
+                if (isUpdating) return;
+                isUpdating = true;
+                try {
+                  updateTotals();
+                } finally {
+                  // liberta o bloqueio depois de um pequeno timeout para permitir outras mudanças se necessário
+                  setTimeout(() => { isUpdating = false; }, 20);
+                }
+              });
+              observer.observe(tableBody, { childList: true, subtree: true, characterData: true, attributes: true });
+            }
           });
         </script>
 </body>
